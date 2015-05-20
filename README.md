@@ -67,9 +67,9 @@ bcftools |  1.1 and 1.2	| 		http://www.htslib.org/download/
 picard |  1.08			| 		http://broadinstitute.github.io/picard/
 bedtools |  2.23		| 			https://github.com/arq5x/bedtools2
 
-## Section 2.1 - RNAsnv dependencies step-by-step installation
+### Section 2.1 - RNAsnv dependencies step-by-step installation
 
-# samtools
+#### samtools
 ```
 git clone https://github.com/samtools/samtools.git
 cd samtools
@@ -78,7 +78,7 @@ make prefix=/usr/users/bdownie install
 ls -l samtools
 ```
 
-# bcftools
+#### bcftools
 ```
 git clone https://github.com/samtools/bcftools.git
 cd bcftools
@@ -87,7 +87,7 @@ make prefix=/usr/users/bdownie install
 ls -l bcftools
 ```
 
-# Bamtools (requires cmake)
+#### Bamtools (requires cmake)
 ```
 git clone git://github.com/pezmaster31/bamtools.git
 cd bamtools/
@@ -98,7 +98,7 @@ make
 ls -l bin/bamtools
 ```
 
-# Bedtools 
+#### Bedtools 
 ```
 git clone https://github.com/arq5x/bedtools2.git
 cd bedtools2
@@ -118,7 +118,7 @@ Ensembl chromosome names are stored by chromosome number. For all programs to wo
 chromosome names must be consistent across all files. For our purposes, we remove "chr" from all annotation files.
 
 #
-## Section 3.1 - Repeat masker track. Change as appropriate for genome of interest.
+### Section 3.1 - Repeat masker track. Change as appropriate for genome of interest.
 
 ```
 wget http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/rmsk.txt.gz
@@ -131,7 +131,7 @@ gunzip -c rmsk.txt.gz | awk '{print $6 "\t" $7 "\t" $8 "\t" $13 "\t" $12}' |   s
 All intermediary files can be deleted after hg19.repeat_intervals.bed is generated
 
 
-## Section 3.2 - Intron track  from UCSC
+### Section 3.2 - Intron track  from UCSC
 
 Download tracks from UCSC table browser (http://genome.ucsc.edu/cgi-bin/hgTables?command=start)
 Step-by-step instructions available from: https://www.biostars.org/p/13290/
@@ -140,7 +140,7 @@ Step-by-step instructions available from: https://www.biostars.org/p/13290/
 gunzip -c ucsc.hg19.introns.bed.gz | sed 's/^chr//' > ucsc.hg19.introns.bed
 ```
 
-## Section 3.3 - RNA edit sites from RADAR
+### Section 3.3 - RNA edit sites from RADAR
 
 Download edit sites from RADAR (http://rnaedit.com/download/)
 Note that sites are only available for hg19, mm9, and dm3. If later versions of these genomes are used for alignment,
