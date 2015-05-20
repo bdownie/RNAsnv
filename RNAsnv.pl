@@ -3,19 +3,6 @@
 #
 #         FILE:  RNAsnv.pl
 #
-#        USAGE:  ./RNAsnv.pl  
-#
-#  DESCRIPTION:  
-#
-#      OPTIONS:  ---
-# REQUIREMENTS:  ---
-#         BUGS:  ---
-#        NOTES:  ---
-#       AUTHOR:  YOUR NAME (), 
-#      COMPANY:  
-#      VERSION:  1.0
-#      CREATED:  12/18/13 12:06:19
-#     REVISION:  ---
 #===============================================================================
 
 use strict;
