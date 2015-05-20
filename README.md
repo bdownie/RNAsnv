@@ -21,7 +21,8 @@ RNAsnv is called using the following format:
 Note that RNAsnv expects a provided WGS bam file to be sorted in coordinate format. This can be done using picard tools, e.g.
 
 ```
-java -Xmx10g -Djava.io.tmpdir=tmp -jar SortSam.jar I=WGS.bam O=WGS.sorted.bam SO=coordinate 
+java -Xmx10g -Djava.io.tmpdir=tmp -jar SortSam.jar \ 
+	I=WGS.bam O=WGS.sorted.bam SO=coordinate 
 ```
 
 Note: The tmpdir option establishes a local directory for temporary files used during sorting, which prevents small partitions
@@ -34,7 +35,8 @@ Also make sure to set LD_LIBRARY_PATH to include bamtools /lib (e.g. export LD_L
 otherwise you'll get an error message with something like: 
 
 ```
-"./remove_3prime_5prime_variants: error while loading shared libraries: libbamtools.so.2.3.0: cannot open shared object file: No such file or directory"
+"./remove_3prime_5prime_variants: error while loading shared libraries: libbamtools.so.2.3.0: 
+cannot open shared object file: No such file or directory"
 ```
 
 Additionally, a configuration file template is provided with the RNAsnv distribution. A trained model for
@@ -59,7 +61,6 @@ to install the programs on a linux system.
 
 Program | Tested version | Download link
 ------------- | -------------| -------------
-
 Bamtools | 2.3.0 		| 		https://github.com/pezmaster31/bamtools
 samtools |  1.1 and 1.2	| 		http://www.htslib.org/download/
 bcftools |  1.1 and 1.2	| 		http://www.htslib.org/download/
