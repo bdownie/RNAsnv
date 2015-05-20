@@ -188,7 +188,7 @@ if ($#bamfiles > 0) {
 
 	unlink $MASTER_BAM_LOC;
 	print LOG "$run_cmd\n";
-	#$return_val = system ($run_cmd);
+	$return_val = system ($run_cmd);
 	if ($return_val) { 
 		print LOG "Return value: $return_val, exitting\n";
 		print STDERR "Return value: $return_val for $HEADER, exitting\n";
@@ -217,7 +217,7 @@ $OUTPUT = "$HEADER.sorted.bam";
 $run_cmd = "$SAMTOOLS view -hS -q $MINMAPQUAL $INPUT | awk '{OFS = \"\\t\"; if (\$1 ~ /^@/) { print} else if (\$5 > 60) { \$5 = 60;  print \$0 } else { print } }'  |  $JAVA_CMD $PICARD/SortSam.jar I=/dev/stdin O=$OUTPUT SO=coordinate VERBOSITY=ERROR QUIET=TRUE >> $HEADER.stdout  2>&1";
 #$run_cmd = "$SAMTOOLS view -hS -q $MINMAPQUAL $INPUT | awk '{OFS = \"\\t\"; if (\$1 ~ /^@/) { print} else if (\$5 > 60) { \$5 = 60;  print \$0 } else { print } }' | samtools view -b - > $OUTPUT";
 print LOG "$run_cmd\n";
-#$return_val = system ($run_cmd);
+$return_val = system ($run_cmd);
 if ($return_val) { 
 	print LOG "Return value: $return_val, exitting\n";
 	print STDERR "Return value: $return_val for $HEADER, exitting\n";
@@ -229,7 +229,7 @@ $INPUT = $OUTPUT;
 $OUTPUT = "$HEADER.bam";
 $run_cmd = "$JAVA_CMD  $PICARD/MarkDuplicates.jar I=$INPUT O=$OUTPUT M=/dev/null REMOVE_DUPLICATES=TRUE ASSUME_SORTED=TRUE VERBOSITY=ERROR QUIET=TRUE >> $HEADER.stdout 2>&1; samtools index $OUTPUT >> $HEADER.stdout 2>&1 ";
 print LOG "$run_cmd\n";
-#$return_val = system ($run_cmd);
+$return_val = system ($run_cmd);
 if ($return_val) { 
 	print LOG "Return value: $return_val, exitting\n";
 	print STDERR "Return value: $return_val for $HEADER, exitting\n";
@@ -244,7 +244,7 @@ my $VCF = "$HEADER.vcf";
 unless (-e "$REFERENCE.fai") { 
 	$run_cmd = "$SAMTOOLS faidx $REFERENCE";
 	print LOG "$run_cmd\n";
-	#$return_val = system ($run_cmd);
+	$return_val = system ($run_cmd);
 	if ($return_val) { 
 		print LOG "Return value: $return_val, exitting\n";
 		print STDERR "Return value: $return_val for $HEADER, exitting\n";
