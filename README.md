@@ -6,6 +6,7 @@ maintaining both high sensitivity and specificity.
 
 RNAsnv is called using the following format:
 
+```
 /path/to/RNAsnv.pl -c <configuration file> [options] [BAM1 BAM2 ...]
 
     Options:
@@ -15,6 +16,7 @@ RNAsnv is called using the following format:
             -train          train model using parameters in config file
             -predict        predict variant site origin using parameters in config file
             -wgs            WGS BAM file file file file
+```
 
 Note that RNAsnv expects a provided WGS bam file to be sorted in coordinate format. This can be done using picard tools,
 e.g. java -Xmx10g -Djava.io.tmpdir=tmp -jar SortSam.jar I=WGS.bam O=WGS.sorted.bam SO=coordinate 
