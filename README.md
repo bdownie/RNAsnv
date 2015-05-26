@@ -1,24 +1,24 @@
-# RNAsnv
+# RNAvc
 ## Section 1 - Overview
 
-RNAsnv is a pipeline for calling genomic SNVs and RNA edit sites from RNA-seq data alone while
+RNAvc is a pipeline for calling genomic SNVs and RNA edit sites from RNA-seq data alone while
 maintaining both high sensitivity and specificity. 
 
-RNAsnv is called using the following format:
+RNAvc is called using the following format:
 
 ```
-/path/to/RNAsnv.pl -c <configuration file> [options] [BAM1 BAM2 ...]
+/path/to/RNAvc.pl -c <configuration file> [options] [BAM1 BAM2 ...]
 
     Options:
             -help           this help message
-            -man            displays RNAsnv man page
+            -man            displays RNAvc man page
             -c              configuration file
             -train          train model using parameters in config file
             -predict        predict variant site origin using parameters in config file
             -wgs            WGS BAM file file file file
 ```
 
-Note that RNAsnv expects a provided WGS bam file to be sorted in coordinate format. This can be done using picard tools, e.g.
+Note that RNAvc expects a provided WGS bam file to be sorted in coordinate format. This can be done using picard tools, e.g.
 
 ```
 java -Xmx10g -Djava.io.tmpdir=tmp -jar SortSam.jar \ 
@@ -28,10 +28,10 @@ java -Xmx10g -Djava.io.tmpdir=tmp -jar SortSam.jar \
 Note: The tmpdir option establishes a local directory for temporary files used during sorting, which prevents small partitions
 such as /tmp from filling too quickly.
 
-## Section 1.1 - Compiling RNAsnv
+## Section 1.1 - Compiling RNAvc
 
-Before compiling RNAsnv, make sure that bamtools is installed (see Section 2) and modify Makefile to point at bamtools /lib and /include directories
-Also make sure to set LD_LIBRARY_PATH to include bamtools /lib (e.g. export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/src/bamtools/lib) when running RNAsnv, 
+Before compiling RNAvc, make sure that bamtools is installed (see Section 2) and modify Makefile to point at bamtools /lib and /include directories
+Also make sure to set LD_LIBRARY_PATH to include bamtools /lib (e.g. export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/src/bamtools/lib) when running RNAvc, 
 otherwise you'll get an error message with something like: 
 
 ```
@@ -39,14 +39,14 @@ otherwise you'll get an error message with something like:
 cannot open shared object file: No such file or directory"
 ```
 
-Additionally, a configuration file template is provided with the RNAsnv distribution. Trained models for
+Additionally, a configuration file template is provided with the RNAvc distribution. Trained models for
 predicting errors and variant site origin can be downloaded from https://github.com/bdownie/RNAvc/releases/latest 
 
 
 
-## Section 1.2 - Citing RNAsnv
+## Section 1.2 - Citing RNAvc
 
-When citing RNAsnv, please use the following reference:
+When citing RNAvc, please use the following reference:
 
 
 
@@ -54,9 +54,9 @@ When citing RNAsnv, please use the following reference:
 
 #####################################################################################################################
 #
-## Section 2 - RNAsnv dependencies
+## Section 2 - RNAvc dependencies
  
-RNAsnv requires the following programs to be installed correctly. See section X for step-by-step examples of how 
+RNAvc requires the following programs to be installed correctly. See section X for step-by-step examples of how 
 to install the programs on a linux system.
 
 Program | Tested version | Download link
@@ -67,7 +67,7 @@ bcftools |  1.1 and 1.2	| 		http://www.htslib.org/download/
 picard |  1.08			| 		http://broadinstitute.github.io/picard/
 bedtools |  2.23		| 			https://github.com/arq5x/bedtools2
 
-### Section 2.1 - RNAsnv dependencies step-by-step installation
+### Section 2.1 - RNAvc dependencies step-by-step installation
 
 #### samtools
 ```
@@ -110,11 +110,11 @@ ls -l bin/bedtools
 
 #####################################################################################################################
 #
-## Section 3 - Generating RNAsnv BED files
+## Section 3 - Generating RNAvc BED files
 
-Generating bed files appropriate for use in RNAsnv, using hg19 as an example
+Generating bed files appropriate for use in RNAvc, using hg19 as an example
 Note that UCSC stores human chromosomes names as "chr1", chr2, etc, while
-Ensembl chromosome names are stored by chromosome number. For all programs to work correctly (RNAsnv, bedtools, etc)
+Ensembl chromosome names are stored by chromosome number. For all programs to work correctly (RNAvc, bedtools, etc)
 chromosome names must be consistent across all files. For our purposes, we remove "chr" from all annotation files.
 
 #
@@ -125,7 +125,7 @@ wget http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/rmsk.txt.gz
 mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A -e "select chrom, size from hg19.chromInfo"  > hg19.genome
 gunzip -c rmsk.txt.gz  | awk '{print $6 "\t" $7 "\t" $8 }' | bedtools complement -i - -g hg19.genome | awk '{print $1 "\t" $2 "\t" $3 "\tNotRepeat\tNotRepeat"}'   > hg19.not_repeats.bed &
 gunzip -c rmsk.txt.gz | awk '{print $6 "\t" $7 "\t" $8 "\t" $13 "\t" $12}' |   sed 's/\?//g' | cat - hg19.not_repeats.bed | bedtools sort | sed 's/^chr//' >  hg19.rmsk.txt.bed &
-~/src/RNAsnv/parse_repeats.pl hg19.rmsk.txt.bed > hg19.repeat_intervals.bed
+~/src/RNAvc/parse_repeats.pl hg19.rmsk.txt.bed > hg19.repeat_intervals.bed
 ```
 
 All intermediary files can be deleted after hg19.repeat_intervals.bed is generated
