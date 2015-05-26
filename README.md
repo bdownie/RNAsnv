@@ -39,8 +39,8 @@ otherwise you'll get an error message with something like:
 cannot open shared object file: No such file or directory"
 ```
 
-Additionally, a configuration file template is provided with the RNAsnv distribution. A trained model for
-predicting variant site origin can be downloaded from X.
+Additionally, a configuration file template is provided with the RNAsnv distribution. Trained models for
+predicting errors and variant site origin can be downloaded from https://github.com/bdownie/RNAvc/releases/latest 
 
 
 
