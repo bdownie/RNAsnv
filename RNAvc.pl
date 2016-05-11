@@ -81,7 +81,7 @@ my $SAMTOOLS = $CONFIG_HASH{'SAMTOOLS'};
 my $BCFTOOLS = $CONFIG_HASH{'BCFTOOLS'};
 my $REFERENCE = $CONFIG_HASH{'REFERENCE'};
 my $PICARD = $CONFIG_HASH{'PICARD'};
-if ($PICARD !~ /picard.jar) { $PICARD .= "/picard.jar"; }
+if ($PICARD !~ /picard.jar/) { $PICARD .= "/picard.jar"; }
 my $BEDTOOLS = $CONFIG_HASH{'BEDTOOLS'};
 
 # Parameters
