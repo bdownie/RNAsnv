@@ -123,9 +123,20 @@ chromosome names must be consistent across all files. For our purposes, we remov
 ```
 wget http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/rmsk.txt.gz
 mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A -e "select chrom, size from hg19.chromInfo"  > hg19.genome
-gunzip -c rmsk.txt.gz  | awk '{print $6 "\t" $7 "\t" $8 }' | bedtools complement -i - -g hg19.genome | awk '{print $1 "\t" $2 "\t" $3 "\tNotRepeat\tNotRepeat"}'   > hg19.not_repeats.bed &
+gunzip -c rmsk.txt.gz  | awk '{print $6 "\t" $7 "\t" $8 }' | bedtools complement -i - -g hg19.genome | awk '{print $1 "\t" $2 "\t" $3 "\tNotRepeat\tNotRepeat"}'   > hg19.not_repeats.bed 
 gunzip -c rmsk.txt.gz | awk '{print $6 "\t" $7 "\t" $8 "\t" $13 "\t" $12}' |   sed 's/\?//g' | cat - hg19.not_repeats.bed | bedtools sort | sed 's/^chr//' >  hg19.rmsk.txt.bed &
 ~/src/RNAvc/parse_repeats.pl hg19.rmsk.txt.bed > hg19.repeat_intervals.bed
+```
+
+For hg38
+``` 
+mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A -e "select chrom, size from hg38.chromInfo" | sed 's/^chr//' | sed 's/^om/chrom/' | egrep -v "^Un|_random|_alt" > hg38.genome
+<hg38.genome chromosomes may be out of order, change to 1..22,X,Y,M
+wget -q http://hgdownload.cse.ucsc.edu/goldenPath/hg38/database/rmsk.txt.gz
+gunzip -c rmsk.txt.gz  | sed 's/chr//' | awk '{print $6 "\t" $7 "\t" $8 }' |  egrep -v "^om|^Un|_random|_alt" | bedtools sort -faidx <(tail -n +2 hg38.genome | awk '{print $1}') -i - | bedtools complement -i - -g hg38.genome | awk '{print $1 "\t" $2 "\t" $3 "\tNotRepeat\tNotRepeat"}' | grep -v "^chrom"  > hg38.not_repeats.bed
+gunzip -c rmsk.txt.gz | awk '{print $6 "\t" $7 "\t" $8 "\t" $13 "\t" $12}' |  sed 's/^chr//' | egrep -v "^Un|_random|_alt" |  sed 's/\?//g' | cat - hg38.not_repeats.bed | bedtools sort -faidx <(tail -n +2 hg38.genome | awk '{print $1}')   >  hg38.rmsk.txt.bed 
+~/src/RNAvc/parse_repeats.pl hg38.rmsk.txt.bed > hg38.repeat_intervals.bed
+
 ```
 
 All intermediary files can be deleted after hg19.repeat_intervals.bed is generated
