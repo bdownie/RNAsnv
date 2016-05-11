@@ -81,6 +81,7 @@ my $SAMTOOLS = $CONFIG_HASH{'SAMTOOLS'};
 my $BCFTOOLS = $CONFIG_HASH{'BCFTOOLS'};
 my $REFERENCE = $CONFIG_HASH{'REFERENCE'};
 my $PICARD = $CONFIG_HASH{'PICARD'};
+if ($PICARD !~ /picard.jar) { $PICARD .= "/picard.jar"; }
 my $BEDTOOLS = $CONFIG_HASH{'BEDTOOLS'};
 
 # Parameters
@@ -180,7 +181,7 @@ if ($#bamfiles > 0) {
 	for (my $i = 0; $i <= $#bamfiles; $i++) { 
 		unless (-f $bamfiles[$i]) { print STDERR "Bad file found: $bamfiles[$i]\n"; exit; }
 	}
-	$run_cmd = "$JAVA_CMD $PICARD/MergeSamFiles.jar SORT_ORDER=coordinate ";
+	$run_cmd = "$JAVA_CMD $PICARD MergeSamFiles SORT_ORDER=coordinate ";
 	foreach my $bamfile (@bamfiles) { 
 		$run_cmd .= "INPUT=$bamfile ";
 	}
@@ -214,7 +215,7 @@ else {
 # Stage 1
 $INPUT = $OUTPUT;
 $OUTPUT = "$HEADER.sorted.bam";
-$run_cmd = "$SAMTOOLS view -hS -q $MINMAPQUAL $INPUT | awk '{OFS = \"\\t\"; if (\$1 ~ /^@/) { print} else if (\$5 > 60) { \$5 = 60;  print \$0 } else { print } }'  |  $JAVA_CMD $PICARD/SortSam.jar I=/dev/stdin O=$OUTPUT SO=coordinate VERBOSITY=ERROR QUIET=TRUE >> $HEADER.stdout  2>&1";
+$run_cmd = "$SAMTOOLS view -hS -q $MINMAPQUAL $INPUT | awk '{OFS = \"\\t\"; if (\$1 ~ /^@/) { print} else if (\$5 > 60) { \$5 = 60;  print \$0 } else { print } }'  |  $JAVA_CMD $PICARD SortSam I=/dev/stdin O=$OUTPUT SO=coordinate VERBOSITY=ERROR QUIET=TRUE >> $HEADER.stdout  2>&1";
 #$run_cmd = "$SAMTOOLS view -hS -q $MINMAPQUAL $INPUT | awk '{OFS = \"\\t\"; if (\$1 ~ /^@/) { print} else if (\$5 > 60) { \$5 = 60;  print \$0 } else { print } }' | samtools view -b - > $OUTPUT";
 print LOG "$run_cmd\n";
 $return_val = system ($run_cmd);
@@ -227,7 +228,9 @@ if ($return_val) {
 # Remove all duplicate reads using picard tools
 $INPUT = $OUTPUT;
 $OUTPUT = "$HEADER.bam";
-$run_cmd = "$JAVA_CMD  $PICARD/MarkDuplicates.jar I=$INPUT O=$OUTPUT M=/dev/null REMOVE_DUPLICATES=TRUE ASSUME_SORTED=TRUE VERBOSITY=ERROR QUIET=TRUE >> $HEADER.stdout 2>&1; samtools index $OUTPUT >> $HEADER.stdout 2>&1 ";
+
+$run_cmd = "$JAVA_CMD  $PICARD MarkDuplicates I=$INPUT O=$OUTPUT M=/dev/null REMOVE_DUPLICATES=TRUE ASSUME_SORTED=TRUE VERBOSITY=ERROR QUIET=TRUE >> $HEADER.stdout 2>&1; samtools index $OUTPUT >> $HEADER.stdout 2>&1 ";
+
 print LOG "$run_cmd\n";
 $return_val = system ($run_cmd);
 if ($return_val) { 
