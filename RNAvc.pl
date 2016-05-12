@@ -163,7 +163,7 @@ if ($WGS =~ /am$/i) {
         unless ((-e "$WGS.bai") || (-e $alt_bai)) {
 		$run_cmd = "samtools index $WGS";
 		print LOG "$run_cmd\n";
-		$return_val = system ($run_cmd);
+                $return_val = system ($run_cmd);
 		if ($return_val) {
 			print LOG "Return value: $return_val, exitting\n";
 			print LOG "The bam file is probably not coordinate sorted\n";
@@ -189,7 +189,7 @@ if ($#bamfiles > 0) {
 
 	unlink $MASTER_BAM_LOC;
 	print LOG "$run_cmd\n";
-	$return_val = system ($run_cmd);
+        $return_val = system ($run_cmd);
 	if ($return_val) { 
 		print LOG "Return value: $return_val, exitting\n";
 		print STDERR "Return value: $return_val for $HEADER, exitting\n";
@@ -247,7 +247,7 @@ my $VCF = "$HEADER.vcf";
 unless (-e "$REFERENCE.fai") { 
 	$run_cmd = "$SAMTOOLS faidx $REFERENCE";
 	print LOG "$run_cmd\n";
-	$return_val = system ($run_cmd);
+        $return_val = system ($run_cmd);
 	if ($return_val) { 
 		print LOG "Return value: $return_val, exitting\n";
 		print STDERR "Return value: $return_val for $HEADER, exitting\n";
@@ -265,8 +265,7 @@ if ($return_val) {
 	exit;
 }
 
-$run_cmd = "$BCFTOOLS concat -O b tmp.*.bcf | tee $HEADER.bcf | $BCFTOOLS view - |  $BCFTOOLS call -m - | $BCFTOOLS filter -i '%TYPE!=\"indel\"' - |  $BCFTOOLS filter -e '%TYPE=\"ref\"' |  $RNAvc_dir/remove_3prime_5prime_variants -b $INPUT -d $DIST_FROM_END -m $MAX_HOMONUCLEOTIDE_STRETCH | $BEDTOOLS sort -header -i - > $VCF 2>> $HEADER.stdout";
-#$run_cmd = "cat $HEADER.bcf | $BCFTOOLS view - |  $BCFTOOLS call -m - | $BCFTOOLS filter -i '%TYPE!=\"indel\"' - |  $BCFTOOLS filter -e '%TYPE=\"ref\"' |  $RNAvc_dir/remove_3prime_5prime_variants -b $INPUT -d $DIST_FROM_END -m $MAX_HOMONUCLEOTIDE_STRETCH | $BEDTOOLS sort -header -i - > $VCF 2>> $HEADER.stdout";
+$run_cmd = "$BCFTOOLS concat -O b tmp.*.bcf | tee $HEADER.bcf |  $BCFTOOLS call -m -g 5 -V indels - |  $RNAvc_dir/remove_3prime_5prime_variants -b $INPUT -d $DIST_FROM_END -m $MAX_HOMONUCLEOTIDE_STRETCH | $BEDTOOLS sort -header -i - > $VCF 2>> $HEADER.stdout";
 print LOG "$run_cmd\n";
 $return_val = system ($run_cmd);
 # This may be necessary to make sure that all the files get sync'd

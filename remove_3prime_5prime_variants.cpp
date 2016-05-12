@@ -13,7 +13,7 @@
 
 #include <iomanip> 
 
-#include <boost/algorithm/string.hpp>
+//#include <boost/algorithm/string.hpp>
 
 
 using namespace BamTools; 
@@ -100,15 +100,24 @@ int main(int argc, char *argv[])
 		vector <string> split_line;
 		stringstream tmp_ss;
 		tmp_ss.str(line);
-		while (tmp_ss.good()) { 
+                unsigned int fieldnum = 0;
+		while (tmp_ss.good() && (fieldnum < 8)) { 
 			string tmp;
 			tmp_ss >> tmp;
 			split_line.push_back(tmp);
 		}
+		string var = split_line[4];
+                if (var == ".") {
+                    if (split_line[7].find("END=") != string::npos) { 
+                        cout << line << endl;
+                    }
+                    continue;
+                }
+
 		string chr = split_line[0];
 		string site = split_line[1];
 		string trash;
-		string var = split_line[4];
+
 
 		//tmp_ss >> chr;
 		//tmp_ss >> site;
