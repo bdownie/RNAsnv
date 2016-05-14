@@ -215,7 +215,7 @@ else {
 # Stage 1
 $INPUT = $OUTPUT;
 $OUTPUT = "$HEADER.sorted.bam";
-$run_cmd = "$SAMTOOLS view -hS -q $MINMAPQUAL $INPUT | awk '{OFS = \"\\t\"; if (\$1 ~ /^@/) { print} else if (\$5 > 60) { \$5 = 60;  print \$0 } else { print } }'  |  $SAMTOOLS view -bS - | $JAVA_CMD $PICARD SortSam I=/dev/stdin O=$OUTPUT SO=coordinate VERBOSITY=ERROR QUIET=TRUE >> $HEADER.stdout  2>&1";
+$run_cmd = "$SAMTOOLS view -hS -f 2 -q $MINMAPQUAL $INPUT | awk '{OFS = \"\\t\"; if (\$1 ~ /^@/) { print} else if (\$5 > 60) { \$5 = 60;  print \$0 } else { print } }'  |  $SAMTOOLS view -bS - | $JAVA_CMD $PICARD SortSam I=/dev/stdin O=$OUTPUT SO=coordinate VERBOSITY=ERROR QUIET=TRUE >> $HEADER.stdout  2>&1";
 #$run_cmd = "$SAMTOOLS view -hS -q $MINMAPQUAL $INPUT | awk '{OFS = \"\\t\"; if (\$1 ~ /^@/) { print} else if (\$5 > 60) { \$5 = 60;  print \$0 } else { print } }' | samtools view -b - > $OUTPUT";
 print LOG "$run_cmd\n";
 $return_val = system ($run_cmd);
