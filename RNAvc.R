@@ -60,10 +60,8 @@ if (mode == "train") {
 		df2[df2$SiteClass == "Unknown",]$SiteClass <- "Edit"
 	}
 
-	#load("NA12878_big.atoi.model")
 
 	gbm.error.model <- train.RNAvc(df2,cores=threads,class="error")
-#save.image()
 
 	# Calculate correctly classified errors
 	output <- capture.output(test.RNAvc(gbm.error.model,df2,class="error"))
@@ -89,10 +87,9 @@ if (mode == "train") {
 	save(gbm.ai.model,gbm.error.model,file=model.name)
 	#save(gbm.ai.model,file=model.ai)
 
-#save.image()
 	gbm.cu.model <- train.RNAvc(df3,cores=threads,class="CU")
 	save(gbm.ai.model,gbm.cu.model,gbm.error.model,file=model.name)
-save.image()
+	save.image()
 
 	if (require("caret") & require("e1071")) {
 		perf <- paste(header,".perf",sep="")
